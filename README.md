@@ -1,13 +1,13 @@
 ## 256ART Generative Art Template
 
-This is a template for creating generative art to be released on-chain via 256ART 
+This is a template for creating generative art to be released fully on-chain via 256ART 
 
 ### Getting Started
 
 To get started with this template, follow these steps:
 
 1. Clone or download the repository.
-2. Open the `artwork.js` file and modify the code to create your desired generative art.
+2. Open the `artwork.js` file and modify the code to create your generative artwork.
 3. Open the `traits.js` file and modify the code to define the traits that should be stored on-chain.
 4. Access the traits defined in `traits.js` from `artwork.js` using the `inputData` object.
 5. Minify the `artwork.js` and `traits.js` files using a tool such as [MinifyAll](https://marketplace.visualstudio.com/items?itemName=Luub.minifyall) in Visual Studio Code.
@@ -29,7 +29,7 @@ The `artwork.js` file contains the code for generating the generative art. You s
 
 The output must be dimension agnostic, meaning it scales seamlessly to any dimension. While you can control the dimension ratio (e.g. width/height can be 1.0, 1.5, 0.75 etc.) you have no control over the dimensions of the browser someone else might be using. At lower resolutions, fewer pixels may limit what your output looks like, such as the smoothness of lines, which is okay. This is mainly to ensure your work can be reproduced at print quality and displayed on any screen size from a phone to a cinema.
 
-A simple way to account for this is to define a default dimension and create a multiplier to scale coordinates or sizes relative to the canvas dimensions. Below uses p5js as an example but the same principle applies regardless of the language.
+A simple way to account for this is to define a default dimension and create a multiplier to scale coordinates or sizes relative to the canvas dimensions. Below uses p5js as an example but the same principle applies regardless (in vanilla JavaScript, make sure to keep DPR in mind too).
 
 ```javascript
 function setup() {
@@ -41,23 +41,19 @@ function setup() {
   let iw = window.innerWidth;
 
   // Determine canvas size
-  let canvasSize;
   if (ih / iw < aspectRatio) {
-    canvasSize = ih / aspectRatio;
+    createCanvas(ih / aspectRatio, ih);
   } else {
-    canvasSize = iw;
+    createCanvas(iw, iw * aspectRatio);
   }
-
-  // Create canvas
-  createCanvas(canvasSize, canvasSize);
 }
 
 function draw() {
   // Define multiplier based on canvas size
-  let multiplier = width / 2400;
+  let multiplier = width / 1000;
 
-  // Use multiplier to scale coordinates and sizes
   // Add code for creating generative art here...
+  // Use multiplier to scale coordinates and sizes
 }
 ```
 
@@ -85,17 +81,17 @@ function draw() {
 
 The `traits.js` file contains the traits that should be stored on-chain. You should modify these for the traits for your generative artwork.
 
-It's important to note that `traits.js` is only for the traits the generative artist would like to store on the Ethereum blockchain. `inputData.js` emulates how traits would be added from the chain, and you should not modify this file.
+It's important to note that `traits.js` is only for the traits you would like to store on the Ethereum blockchain. These traits can not depend on the values of other traits. `inputData.js` emulates how traits would be added from the chain, and you should not modify this file.
 
-Traits are stored fully in-chain and calculated on a scale of 0 - 10000. Use strings for `trait_description` and `trait_value` (for on-chain storage). If you need to store non-string data types, use parse functions (e.g., `parseInt()`) in `artwork.js`.
+Traits are stored fully in-chain and calculated on a scale of 0 - 10000. Use strings for `trait_description` and `trait_value` (for on-chain storage). If you need to store non-string data types, use parse functions (e.g., `parseInt()`) inside your art script.
 
 To access traits in your art script, use `inputData["traitName"]`.
 
 ## inputData.js
 
-This file generates the input data the same way it would be created on-chain. The `inputData` object contains the `tokenId` and `hash`, as well as the randomized trait values based on the `hash`. The `hash` serves as the seed for the randomness, ensuring that the same set of traits is generated each time the same `hash` is used.
+This file generates the input data the same way it would be created on chain. The `inputData` object contains the `tokenId` and `hash`, as well as the randomized trait values based on the `hash`. The `hash` serves as the seed for the randomness, ensuring that the same set of traits is generated each time the same `hash` is used.
 
-The `hash` value can be set as a URL parameter or a random `hash` will be generated if no value is specified. This allows the artist to keep the same set of traits by using the same `hash`, which can be useful during development. The `tokenId` value can also be set as a URL parameter or generated randomly.
+During development, the `hash` value can be set as a URL parameter or a random `hash` will be generated if no value is specified. This allows the artist to keep the same set of traits by using the same `hash`, which can be useful when debugging. The `tokenId` value can also be set as a URL parameter, else it will be generated randomly (0 - 255).
 
 It's important to note that the `inputData.js` file should not be modified, as it emulates how the traits would be added from the chain. Instead, the `traits.js` file should be modified to define the traits for the generative artwork. The `generateRandomNumbers` function in `inputData.js` uses the `traits` object to generate randomized trait values based on the `hash`.
 
