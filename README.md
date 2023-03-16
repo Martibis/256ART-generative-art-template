@@ -101,4 +101,4 @@ After modifying and minifying the artwork.js and traits.js files, upload the min
 
 ### Dependencies 
 
-Note that the only dependency for this template is `ethers.js` (used in `inputData.js` to emulate getting traits from chain), which is stored in the repo directly. There is no need for a bundler. You can add libraries CDN scripts to `index.html`, but we only accept those that can be found on [EthFS](https://ethfs.xyz/).
+Note that the only dependency for this template is `ethers.js` (used in `inputData.js` to emulate getting traits from chain), which is stored in the repo directly. There is no need for a bundler. You can add libraries CDN scripts to `index.html`, but we only accept those that can be found on [EthFS](https://ethfs.xyz/), as these are available from chain. You can look into the File Explorer on the website to find which libraries and which version of those libraries are available. At the time of writing p5js v1.5.0, p5sound v1.0.1, Tone.js (version unknown) and threejs v0.147.0 are available. If a library you like to use is missing, you can store it on-chain using [EthFS](https://ethfs.xyz/), keep in mind this is very costly to do.
