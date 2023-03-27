@@ -1,6 +1,6 @@
 ## 256ART Generative Art Template
 
-This is a template for creating generative art to be released fully on-chain via 256ART 
+This is a template for creating generative art to be released fully in-chain via 256ART 
 
 ### Getting Started
 
