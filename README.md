@@ -93,6 +93,8 @@ During development, the `hash` value can be set as a URL parameter or a random `
 
 It's important to note that the `inputData.js` file should not be modified, as it emulates how the traits would be added from the chain. Instead, the `traits.json` file should be modified to define the traits for the generative artwork. The `generateRandomNumbers` function in `inputData.js` uses the `traits` object to generate randomized trait values based on the `hash`.
 
+To share the inputData object between `inputData.js` and `artwork.js` without modifying `artwork.js`, we use an IIFE in `inputData.js`. This approach initializes the inputData object with the traits from `traits.json` and dynamically loads `artwork.js`.
+
 ### Uploading Files to 256ART
 
 After modifying and minifying the artwork.js and traits.json files, upload the minified versions to the 256ART website. Fill out the form on the 256ART website and submit it to create the transaction for creating your art on-chain.
