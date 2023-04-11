@@ -8,18 +8,16 @@ To get started with this template, follow these steps:
 
 1. Clone or download the repository.
 2. Open the `artwork.js` file and modify the code to create your generative artwork.
-3. Open the `traits.js` file and modify the code to define the traits that should be stored on-chain.
-4. Access the traits defined in `traits.js` from `artwork.js` using the `inputData` object.
-5. Minify the `artwork.js` and `traits.js` files using a tool such as [MinifyAll](https://marketplace.visualstudio.com/items?itemName=Luub.minifyall) in Visual Studio Code.
-6. Upload the minified `artwork.min.js` and `traits.min.js` files to the 256ART website.
+3. Open the `traits.json` file and modify the code to define the traits that should be stored on-chain.
+4. Access the traits defined in `traits.json` from `artwork.js` using the `inputData` object.
+5. Minify the `artwork.js` and `traits.json` files using a tool such as [MinifyAll](https://marketplace.visualstudio.com/items?itemName=Luub.minifyall) in Visual Studio Code.
+6. Upload the minified `artwork.js` and `traits.json` files to the 256ART website.
 7. Fill out the form on the website and submit it to create the transactions for creating the art on-chain.
 
 ### File Structure
 
-- `artwork.js`: This file contains the code for generating the generative art. This is the file that You should modify.
-- `artwork.min.js`: This is the minified version of `artwork.js`. This is the file that should be uploaded to the 256ART website.
-- `traits.js`: This file contains the code that defines the traits that should be stored on-chain.
-- `traits.min.js`: This is the minified version of `traits.js`. This is the file that should be uploaded to the 256ART website.
+- `artwork.js`: This file contains the code for generating the generative art. This is the file that you should modify. Make sure to minify it before uploading to 256ART.
+- `traits.json`: This file contains the code that defines the traits that should be stored on-chain.
 - `inputData.js`: This file emulates how traits would be added from the chain. You should not modify this file.
 - `index.html`: This file contains the code for displaying the generative art on the website. You can add libraries CDN scripts to this file, but only those that can be found on EthFS.
 
@@ -57,13 +55,13 @@ function draw() {
 }
 ```
 
-To access the traits defined in `traits.js`, access the inputData object which is available in your `artwork.js` code. For example, if you defined a trait for color in traits.js like this:
+To access the traits defined in `traits.json`, access the inputData object which is available in your `artwork.js` code. For example, if you defined a trait for color in traits.json like this:
 
 ```
 {
   "color": [
-    { "trait_value": "red", "weight": 5000 },
-    { "trait_value": "blue", "weight": 10000 }
+    { "trait_value": "red", "weight": 6000 }, //60% chance (0 - 6000)
+    { "trait_value": "blue", "weight": 10000 } //40% chance (6000 - 10000)
   ]
 }
 ```
@@ -72,18 +70,18 @@ You could access this trait in your artwork.js code like this:
 
 ```
 function draw() {
-  let color = inputData.color; // Access the color trait defined in traits.js
+  let color = inputData.color; // Access the color trait defined in traits.json
   // Add code for creating generative art using the color trait...
 }
 ```
 
 ### Storing Traits on Chain
 
-The `traits.js` file contains the traits that should be stored on-chain. You should modify these for the traits for your generative artwork.
+The `traits.json` file contains the traits that should be stored on-chain. You should modify these for the traits for your generative artwork.
 
-It's important to note that `traits.js` is only for the traits you would like to store on the Ethereum blockchain. These traits can not depend on the values of other traits. `inputData.js` emulates how traits would be added from the chain, and you should not modify this file.
+It's important to note that `traits.json` is only for the traits you would like to store on the Ethereum blockchain. These traits can not depend on the values of other traits. `inputData.js` emulates how traits would be added from the chain, and you should not modify this file.
 
-Traits are stored fully in-chain and calculated on a scale of 0 - 10000. Use strings for `trait_description` and `trait_value` (for on-chain storage). If you need to store non-string data types, use parse functions (e.g., `parseInt()`) inside your art script.
+Traits are stored fully in-chain and calculated on a scale of 0 - 10000. Use strings for `trait_description` and `trait_value`. If you need to store non-string data types, use parse functions (e.g., `parseInt()`) inside your art script.
 
 To access traits in your art script, use `inputData["traitName"]`.
 
@@ -93,11 +91,11 @@ This file generates the input data the same way it would be created on chain. Th
 
 During development, the `hash` value can be set as a URL parameter or a random `hash` will be generated if no value is specified. This allows the artist to keep the same set of traits by using the same `hash`, which can be useful when debugging. The `tokenId` value can also be set as a URL parameter, else it will be generated randomly (0 - 255).
 
-It's important to note that the `inputData.js` file should not be modified, as it emulates how the traits would be added from the chain. Instead, the `traits.js` file should be modified to define the traits for the generative artwork. The `generateRandomNumbers` function in `inputData.js` uses the `traits` object to generate randomized trait values based on the `hash`.
+It's important to note that the `inputData.js` file should not be modified, as it emulates how the traits would be added from the chain. Instead, the `traits.json` file should be modified to define the traits for the generative artwork. The `generateRandomNumbers` function in `inputData.js` uses the `traits` object to generate randomized trait values based on the `hash`.
 
 ### Uploading Files to 256ART
 
-After modifying and minifying the artwork.js and traits.js files, upload the minified versions to the 256ART website. Fill out the form on the 256ART website and submit it to create the transaction for creating your art on-chain.
+After modifying and minifying the artwork.js and traits.json files, upload the minified versions to the 256ART website. Fill out the form on the 256ART website and submit it to create the transaction for creating your art on-chain.
 
 ### Dependencies 
 
