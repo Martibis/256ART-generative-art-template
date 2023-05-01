@@ -95,6 +95,29 @@ It's important to note that the `inputData.js` file should not be modified, as i
 
 To share the inputData object between `inputData.js` and `artwork.js` without modifying `artwork.js`, we use an IIFE in `inputData.js`. This approach initializes the inputData object with the traits from `traits.json` and dynamically loads `artwork.js`.
 
+### Image Preview Generation for 256ART
+
+To allow 256ART to generate image previews of your generative artwork for marketplaces, digital galleries, and other front-ends, you need to set the `window.rendered` property equal to the `canvas` object when the work is fully rendered. This way, 256ART can capture the generated canvas, create an image preview, and store it as part of the tokenURI in the ERC721 smart contract under the "image" property.
+
+To implement this, add the following line of code in your `artwork.js` file once the artwork is completely rendered:
+
+```
+window.rendered = canvas;
+```
+
+For example, in a p5js sketch, you could add the `window.rendered = canvas;` line at the end of the `draw()` function after the artwork has been fully rendered:
+
+```
+function draw() {
+  // Add code for creating generative art here...
+
+  // Set window.rendered to the canvas object when artwork is fully rendered
+  window.rendered = canvas;
+}
+```
+
+By setting the `window.rendered` property, you are providing 256ART with a signal to capture the rendered canvas and generate an image preview. If you do not set the window.rendered property, only the base64 encoded HTML with the art script will be sent under the "animation_url" property, and no image preview will be generated. Providing image previews is often needed for front-ends as they may not be able to render multiple "live rendering" of the art script, especially when the artworks are resource-intensive. The image previews make it easier for front-ends to display your generative art without the performance overhead of rendering the artwork live.
+
 ### Uploading Files to 256ART
 
 After modifying and minifying the artwork.js and traits.json files, upload the minified versions to the 256ART website. Fill out the form on the 256ART website and submit it to create the transaction for creating your art on-chain.
