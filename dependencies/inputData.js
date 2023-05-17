@@ -56,9 +56,10 @@ let inputData = {
     // Add traits to inputData based on generated random numbers
     for (let j = 0; j < Object.keys(traits).length; j++) {
         let r = randNumbers[j];
-        for (let k = 0; k < Object.keys(traits)[j].length; k++) {
-            if (r < traits[Object.keys(traits)[j]][k].weight) {
-                inputData[Object.keys(traits)[j]] = traits[Object.keys(traits)[j]][k].trait_value;
+        let traitArray = traits[Object.keys(traits)[j]];
+        for (let k = 0; k < traitArray.length; k++) {
+            if (r < traitArray[k].weight) {
+                inputData[Object.keys(traits)[j]] = traitArray[k].trait_value;
                 break;
             }
         }
