@@ -72,12 +72,5 @@ let inputData = {
     const artworkScript = document.createElement('script');
     artworkScript.src = '../scripts/artwork.js';
     document.body.appendChild(artworkScript);
-
-    artworkScript.onload = function () {
-        if (window.p5 && !window.p5.instance) {
-            // The p5 library is loaded and there is no p5 instance yet, so create one.
-            window.p5.instance = new p5();
-        }
-    };
 })();
 

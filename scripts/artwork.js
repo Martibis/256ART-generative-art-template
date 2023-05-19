@@ -119,3 +119,6 @@ function draw() {
 let canvas = document.createElement("canvas");
 setup();
 draw();
+
+//Make sure this is uncommented if you're using p5js!!!
+//new p5();
