@@ -99,7 +99,7 @@ To share the inputData object between `inputData.js` and `artwork.js` without mo
 
 To allow 256ART to generate image previews of your generative artwork for marketplaces, digital galleries, and other front-ends, you need to set the `window.rendered` property equal to the `canvas` object when the work is fully rendered. This way, 256ART can capture the generated canvas, create an image preview, and store it as part of the tokenURI in the ERC721 smart contract under the "image" property.
 
-To implement this, add the following line of code in your `artwork.js` file once the artwork is completely rendered:
+Make sure to add the following line of code in your `artwork.js` file once the artwork is completely rendered:
 
 ```
 window.rendered = canvas;
@@ -116,7 +116,7 @@ function draw() {
 }
 ```
 
-By setting the `window.rendered` property, you are providing 256ART with a signal to capture the rendered canvas and generate an image preview. If you do not set the window.rendered property, only the base64 encoded HTML with the art script will be sent under the "animation_url" property, and no image preview will be generated. Providing image previews is often needed for front-ends as they may not be able to render multiple "live rendering" of the art script, especially when the artworks are resource-intensive. The image previews make it easier for front-ends to display your generative art without the performance overhead of rendering the artwork live.
+By setting the `window.rendered` property, you are providing 256ART with a signal to capture the rendered canvas and generate an image preview. Providing image previews is needed for front-ends as they may not be able to render multiple "live rendering" of the art script, especially when the artworks are resource-intensive. The image previews make it easier for front-ends to display your generative art without the performance overhead of rendering the artwork live.
 
 ### Uploading Files to 256ART
 
