@@ -105,14 +105,19 @@ Make sure to add the following line of code in your `artwork.js` file once the a
 window.rendered = canvas;
 ```
 
-For example, in a p5js sketch, you could add the `window.rendered = canvas;` line at the end of the `draw()` function after the artwork has been fully rendered:
+For example, in a p5js sketch, you could add the `window.rendered = c.canvas;` line at the end of the `draw()` function after the artwork has been fully rendered:
 
 ```
+let c;
+function setup(){
+  // Create your canvas
+  c = createCanvas(width, height);
+}
 function draw() {
   // Add code for creating generative art here...
 
   // Set window.rendered to the canvas object when artwork is fully rendered
-  window.rendered = canvas;
+  window.rendered = c.canvas;
 }
 ```
 
