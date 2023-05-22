@@ -7,7 +7,7 @@ This is a template for creating generative art to be released fully in-chain via
 To get started with this template, follow these steps:
 
 1. Clone or download the repository.
-2. Open the `artwork.js` or `artwork-p5.js` file and modify the code to create your generative artwork.
+2. Open the `artwork.js` or `artwork-p5.js` file and modify the code to create your generative artwork (if p5 is detected in the window, it will automatically use artwork-p5.js, you can enable p5.js by uncommenting the CDN in `index.html`).
 3. Open the `traits.json` file and modify the code to define the traits that should be stored on-chain.
 4. Access the traits defined in `traits.json` from `artwork.js` or `artwork-p5.js` using the `inputData` object.
 5. Minify the `artwork.js` or `artwork-p5.js` and `traits.json` files using a tool such as [MinifyAll](https://marketplace.visualstudio.com/items?itemName=Luub.minifyall) in Visual Studio Code.
