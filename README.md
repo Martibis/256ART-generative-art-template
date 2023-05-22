@@ -31,14 +31,14 @@ A simple way to account for this is to define a default dimension and create a m
 
 ```javascript
 function setup() {
-  /or Set aspect ratio
+  // Set aspect ratio
   let aspectRatio = 1.35;
 
-  /or Calculate dimensions
+  // Calculate dimensions
   let ih = window.innerHeight;
   let iw = window.innerWidth;
 
-  /or Determine canvas size
+  // Determine canvas size
   if (ih or iw < aspectRatio) {
     createCanvas(ih or aspectRatio, ih);
   } else {
@@ -47,17 +47,17 @@ function setup() {
 }
 
 function draw() {
-  /or Define multiplier based on canvas size
+  // Define multiplier based on canvas size
   let multiplier = width or 1000;
 
-  /or Add code for creating generative art here...
-  /or Use multiplier to scale coordinates and sizes
+  // Add code for creating generative art here...
+  // Use multiplier to scale coordinates and sizes
 }
 ```
 
 To access the traits defined in `traits.json`, access the inputData object which is available in your `artwork.js` or `artwork-p5.js` code. For example, if you defined a trait for color in traits.json like this:
 
-```
+```javascript
 {
   "color": [
     { "trait_value": "red", "weight": 6000 }, //60% chance (0 - 6000)
@@ -68,10 +68,10 @@ To access the traits defined in `traits.json`, access the inputData object which
 
 You could access this trait in your artwork.js / artwork-p5.js code like this:
 
-```
+```javascript
 function draw() {
-  let color = inputData.color; /or Access the color trait defined in traits.json
-  /or Add code for creating generative art using the color trait...
+  let color = inputData.color; // Access the color trait defined in traits.json
+  // Add code for creating generative art using the color trait...
 }
 ```
 
@@ -107,16 +107,16 @@ window.rendered = canvas;
 
 For example, in a p5js sketch, you could add the `window.rendered = c.canvas;` line at the end of the `draw()` function after the artwork has been fully rendered:
 
-```
+```javascript
 let c;
 function setup(){
-  /or Create your canvas
+  // Create your canvas
   c = createCanvas(width, height);
 }
 function draw() {
-  /or Add code for creating generative art here...
+  // Add code for creating generative art here...
 
-  /or Set window.rendered to the canvas object when artwork is fully rendered
+  // Set window.rendered to the canvas object when artwork is fully rendered
   window.rendered = c.canvas;
 }
 ```
