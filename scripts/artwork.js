@@ -53,14 +53,12 @@ function setup() {
   // Set aspect ratio
   let aspectRatio = 1.35;
 
-  // DPI multiplier not needed in p5js
   let dp = window.devicePixelRatio;
 
   // Calculate dimensions
   let ih = window.innerHeight * dp;
   let iw = window.innerWidth * dp;
 
-  // Replace with createCanvas in p5js
   if (ih / iw < aspectRatio) {
     canvas.height = ih;
     canvas.width = ih / aspectRatio;
@@ -68,7 +66,6 @@ function setup() {
     canvas.width = iw;
     canvas.height = iw * aspectRatio;
   }
-  // Remove in p5js
   document.body.appendChild(canvas);
 }
 
@@ -115,10 +112,6 @@ function draw() {
   window.rendered = canvas;
 }
 
-// Remove in p5js
 let canvas = document.createElement("canvas");
 setup();
 draw();
-
-//Make sure this is uncommented if you're using p5js!!!
-//new p5();

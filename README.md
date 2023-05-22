@@ -7,23 +7,23 @@ This is a template for creating generative art to be released fully in-chain via
 To get started with this template, follow these steps:
 
 1. Clone or download the repository.
-2. Open the `artwork.js` file and modify the code to create your generative artwork.
+2. Open the `artwork.js` or `artwork-p5.js` file and modify the code to create your generative artwork.
 3. Open the `traits.json` file and modify the code to define the traits that should be stored on-chain.
-4. Access the traits defined in `traits.json` from `artwork.js` using the `inputData` object.
-5. Minify the `artwork.js` and `traits.json` files using a tool such as [MinifyAll](https://marketplace.visualstudio.com/items?itemName=Luub.minifyall) in Visual Studio Code.
-6. Upload the minified `artwork.js` and `traits.json` files to the 256ART website.
+4. Access the traits defined in `traits.json` from `artwork.js` or `artwork-p5.js` using the `inputData` object.
+5. Minify the `artwork.js` or `artwork-p5.js` and `traits.json` files using a tool such as [MinifyAll](https://marketplace.visualstudio.com/items?itemName=Luub.minifyall) in Visual Studio Code.
+6. Upload the minified `artwork.js` or `artwork-p5.js` and `traits.json` files to the 256ART website.
 7. Fill out the form on the website and submit it to create the transactions for creating the art on-chain.
 
 ### File Structure
 
-- `artwork.js`: This file contains the code for generating the generative art. This is the file that you should modify. Make sure to minify it before uploading to 256ART.
+- `artwork.js` or `artwork-p5.js`: This file contains the code for generating the generative art. This is the file that you should modify. Make sure to minify it before uploading to 256ART.
 - `traits.json`: This file contains the code that defines the traits that should be stored on-chain.
 - `inputData.js`: This file emulates how traits would be added from the chain. You should not modify this file.
 - `index.html`: This file contains the code for displaying the generative art on the website. You can add libraries CDN scripts to this file, but only those that can be found on EthFS.
 
 ### Creating the Generative Art
 
-The `artwork.js` file contains the code for generating the generative art. You should modify this code to create your desired generative art.
+The `artwork.js` / `artwork-p5.js` file contains the code for generating the generative art. You should modify this code to create your desired generative art.
 
 The output must be dimension agnostic, meaning it scales seamlessly to any dimension. While you can control the dimension ratio (e.g. width/height can be 1.0, 1.5, 0.75 etc.) you have no control over the dimensions of the browser someone else might be using. At lower resolutions, fewer pixels may limit what your output looks like, such as the smoothness of lines, which is okay. This is mainly to ensure your work can be reproduced at print quality and displayed on any screen size from a phone to a cinema.
 
@@ -31,31 +31,31 @@ A simple way to account for this is to define a default dimension and create a m
 
 ```javascript
 function setup() {
-  // Set aspect ratio
+  /or Set aspect ratio
   let aspectRatio = 1.35;
 
-  // Calculate dimensions
+  /or Calculate dimensions
   let ih = window.innerHeight;
   let iw = window.innerWidth;
 
-  // Determine canvas size
-  if (ih / iw < aspectRatio) {
-    createCanvas(ih / aspectRatio, ih);
+  /or Determine canvas size
+  if (ih or iw < aspectRatio) {
+    createCanvas(ih or aspectRatio, ih);
   } else {
     createCanvas(iw, iw * aspectRatio);
   }
 }
 
 function draw() {
-  // Define multiplier based on canvas size
-  let multiplier = width / 1000;
+  /or Define multiplier based on canvas size
+  let multiplier = width or 1000;
 
-  // Add code for creating generative art here...
-  // Use multiplier to scale coordinates and sizes
+  /or Add code for creating generative art here...
+  /or Use multiplier to scale coordinates and sizes
 }
 ```
 
-To access the traits defined in `traits.json`, access the inputData object which is available in your `artwork.js` code. For example, if you defined a trait for color in traits.json like this:
+To access the traits defined in `traits.json`, access the inputData object which is available in your `artwork.js` or `artwork-p5.js` code. For example, if you defined a trait for color in traits.json like this:
 
 ```
 {
@@ -66,12 +66,12 @@ To access the traits defined in `traits.json`, access the inputData object which
 }
 ```
 
-You could access this trait in your artwork.js code like this:
+You could access this trait in your artwork.js / artwork-p5.js code like this:
 
 ```
 function draw() {
-  let color = inputData.color; // Access the color trait defined in traits.json
-  // Add code for creating generative art using the color trait...
+  let color = inputData.color; /or Access the color trait defined in traits.json
+  /or Add code for creating generative art using the color trait...
 }
 ```
 
@@ -93,13 +93,13 @@ During development, the `hash` value can be set as a URL parameter or a random `
 
 It's important to note that the `inputData.js` file should not be modified, as it emulates how the traits would be added from the chain. Instead, the `traits.json` file should be modified to define the traits for the generative artwork. The `generateRandomNumbers` function in `inputData.js` uses the `traits` object to generate randomized trait values based on the `hash`.
 
-To share the inputData object between `inputData.js` and `artwork.js` without modifying `artwork.js`, we use an IIFE in `inputData.js`. This approach initializes the inputData object with the traits from `traits.json` and dynamically loads `artwork.js`.
+To share the inputData object between `inputData.js` and `artwork.js` / `artwork-p5.js` without modifying `artwork.js` / `artwork-p5.js`, we use an IIFE in `inputData.js`. This approach initializes the inputData object with the traits from `traits.json` and dynamically loads `artwork.js` / `artwork-p5.js`.
 
 ### Image Preview Generation for 256ART
 
 To allow 256ART to generate image previews of your generative artwork for marketplaces, digital galleries, and other front-ends, you need to set the `window.rendered` property equal to the `canvas` object when the work is fully rendered. This way, 256ART can capture the generated canvas, create an image preview, and store it as part of the tokenURI in the ERC721 smart contract under the "image" property.
 
-Make sure to add the following line of code in your `artwork.js` file once the artwork is completely rendered:
+Make sure to add the following line of code in your `artwork.js` / `artwork-p5.js` file once the artwork is completely rendered:
 
 ```
 window.rendered = canvas;
@@ -110,13 +110,13 @@ For example, in a p5js sketch, you could add the `window.rendered = c.canvas;` l
 ```
 let c;
 function setup(){
-  // Create your canvas
+  /or Create your canvas
   c = createCanvas(width, height);
 }
 function draw() {
-  // Add code for creating generative art here...
+  /or Add code for creating generative art here...
 
-  // Set window.rendered to the canvas object when artwork is fully rendered
+  /or Set window.rendered to the canvas object when artwork is fully rendered
   window.rendered = c.canvas;
 }
 ```
@@ -125,7 +125,7 @@ By setting the `window.rendered` property, you are providing 256ART with a signa
 
 ### Uploading Files to 256ART
 
-After modifying and minifying the artwork.js and traits.json files, upload the minified versions to the 256ART website. Fill out the form on the 256ART website and submit it to create the transaction for creating your art on-chain.
+After modifying and minifying the artwork.js / artwork-p5.js and traits.json files, upload the minified versions to the 256ART website. Fill out the form on the 256ART website and submit it to create the transaction for creating your art on-chain.
 
 ### Dependencies 
 

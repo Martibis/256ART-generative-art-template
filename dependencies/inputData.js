@@ -70,7 +70,7 @@ let inputData = {
 
     // Load artwork.js after inputData.js has finished executing
     const artworkScript = document.createElement('script');
-    artworkScript.src = '../scripts/artwork.js';
+    artworkScript.src = window.p5 ? '../scripts/artwork-p5.js' : '../scripts/artwork.js';
     document.body.appendChild(artworkScript);
 })();
 
