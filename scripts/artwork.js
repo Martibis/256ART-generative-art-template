@@ -21,7 +21,7 @@ class Random {
         return (t >>> 0) / 4294967296;
       };
     };
-    this.prng = sfc32(hash);
+    this.prng = sfc32(inputData.hash);
   }
   // Random decimal [0, 1)
   random_dec() {
