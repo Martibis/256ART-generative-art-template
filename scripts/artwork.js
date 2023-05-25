@@ -1,15 +1,17 @@
 // Recommended class for randomness; remove unneeded functionality
 class Random {
   constructor() {
-    this.useA = false;
-    // sfc32 function for PRNG
-    let sfc32 = function (uint128Hex) {
-      let a = parseInt(uint128Hex.substring(0, 8), 16);
-      let b = parseInt(uint128Hex.substring(8, 8), 16);
-      let c = parseInt(uint128Hex.substring(16, 8), 16);
-      let d = parseInt(uint128Hex.substring(24, 8), 16);
+    let sfc32 = function (hex256) {
+      let a = parseInt(hex256.substr(2, 8), 16) ^ parseInt(hex256.substr(34, 8), 16);
+      let b = parseInt(hex256.substr(10, 8), 16) ^ parseInt(hex256.substr(42, 8), 16);
+      let c = parseInt(hex256.substr(18, 8), 16) ^ parseInt(hex256.substr(50, 8), 16);
+      let d = parseInt(hex256.substr(26, 8), 16) ^ parseInt(hex256.substr(58, 8), 16);
+
       return function () {
-        a |= 0; b |= 0; c |= 0; d |= 0;
+        a |= 0;
+        b |= 0;
+        c |= 0;
+        d |= 0;
         let t = (((a + b) | 0) + d) | 0;
         d = (d + 1) | 0;
         a = b ^ (b >>> 9);
@@ -19,17 +21,11 @@ class Random {
         return (t >>> 0) / 4294967296;
       };
     };
-    this.prngA = new sfc32(inputData.hash.substring(2, 32));
-    this.prngB = new sfc32(inputData.hash.substring(34, 32));
-    for (let i = 0; i < 1e6; i += 2) {
-      this.prngA();
-      this.prngB();
-    }
+    this.prng = sfc32(hash);
   }
   // Random decimal [0, 1)
   random_dec() {
-    this.useA = !this.useA;
-    return this.useA ? this.prngA() : this.prngB();
+    return this.prng();
   }
   // Random number [a, b)
   random_num(a, b) {

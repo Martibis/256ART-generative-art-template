@@ -1,42 +1,46 @@
 class Random {
     constructor() {
-        this.useA = false;
-        let n = function (n) {
-            let r = parseInt(n.substring(0, 8), 16),
-                t = parseInt(n.substring(8, 8), 16),
-                e = parseInt(n.substring(16, 8), 16),
-                o = parseInt(n.substring(24, 8), 16);
+        let sfc32 = function (hex256) {
+            let a = parseInt(hex256.substr(2, 8), 16) ^ parseInt(hex256.substr(34, 8), 16);
+            let b = parseInt(hex256.substr(10, 8), 16) ^ parseInt(hex256.substr(42, 8), 16);
+            let c = parseInt(hex256.substr(18, 8), 16) ^ parseInt(hex256.substr(50, 8), 16);
+            let d = parseInt(hex256.substr(26, 8), 16) ^ parseInt(hex256.substr(58, 8), 16);
+
             return function () {
-                e |= 0;
-                let n = ((r |= 0) + (t |= 0) | 0) + (o |= 0) | 0;
-                return (
-                    (o = (o + 1) | 0),
-                    (r = t ^ (t >>> 9)),
-                    (t = e + (e << 3) | 0),
-                    (e = (e = (e << 21) | (e >>> 11)) + n | 0),
-                    (n >>> 0) / 4294967296
-                );
+                a |= 0;
+                b |= 0;
+                c |= 0;
+                d |= 0;
+                let t = (((a + b) | 0) + d) | 0;
+                d = (d + 1) | 0;
+                a = b ^ (b >>> 9);
+                b = (c + (c << 3)) | 0;
+                c = (c << 21) | (c >>> 11);
+                c = (c + t) | 0;
+                return (t >>> 0) / 4294967296;
             };
         };
-        this.prngA = new n(inputData.hash.substring(2, 32));
-        this.prngB = new n(inputData.hash.substring(34, 32));
-        for (let r = 0; r < 1e6; r += 2) this.prngA(), this.prngB();
+        this.prng = sfc32(hash);
     }
+    // Random decimal [0, 1)
     random_dec() {
-        this.useA = !this.useA;
-        return this.useA ? this.prngA() : this.prngB();
+        return this.prng();
     }
-    random_num(n, r) {
-        return n + (r - n) * this.random_dec();
+    // Random number [a, b)
+    random_num(a, b) {
+        return a + (b - a) * this.random_dec();
     }
-    random_int(n, r) {
-        return Math.floor(this.random_num(n, r + 1));
+    // Random integer [a, b] (a < b required)
+    random_int(a, b) {
+        return Math.floor(this.random_num(a, b + 1));
     }
-    random_bool(n) {
-        return this.random_dec() < n;
+    // Random boolean (p = true probability)
+    random_bool(p) {
+        return this.random_dec() < p;
     }
-    random_choice(n) {
-        return n[this.random_int(0, n.length - 1)];
+    // Choose random item from array
+    random_choice(list) {
+        return list[this.random_int(0, list.length - 1)];
     }
 }
 
