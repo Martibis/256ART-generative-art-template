@@ -1,13 +1,13 @@
 ## 256ART Generative Art Template
 
-This is a template for creating generative art to be released fully in-chain via 256ART 
+This is a template for creating generative art to be released fully in-chain via 256ART.
 
 ### Getting Started
 
 To get started with this template, follow these steps:
 
 1. Clone or download the repository.
-2. Open the `artwork.js` or `artwork-p5.js` file and modify the code to create your generative artwork (if p5 is detected in the window, it will automatically use artwork-p5.js, you can enable p5.js by uncommenting the CDN in `index.html`).
+2. Modify artwork.js or artwork-p5.js to create your artwork. If p5 is detected, it will use artwork-p5.js (enable p5.js by uncommenting the CDN in index.html). Remember, due to browser security measures, you need to run this on a local server when testing. In Visual Studio Code, the Live Server extension makes this process easier. After installation, simply click "Go Live" at the bottom to start the server and open your default browser.
 3. Open the `traits.json` file and modify the code to define the traits that should be stored on-chain.
 4. Access the traits defined in `traits.json` from `artwork.js` or `artwork-p5.js` using the `inputData` object.
 5. Minify the `artwork.js` or `artwork-p5.js` and `traits.json` files using a tool such as [MinifyAll](https://marketplace.visualstudio.com/items?itemName=Luub.minifyall) in Visual Studio Code.
