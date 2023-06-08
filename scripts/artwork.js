@@ -33,7 +33,7 @@ class Random {
 
 function setup() {
   // Set aspect ratio
-  let aspectRatio = 1.35;
+  let aspectRatio = 0.75;
 
   let dp = window.devicePixelRatio;
 
@@ -41,15 +41,16 @@ function setup() {
   let ih = window.innerHeight * dp;
   let iw = window.innerWidth * dp;
 
-  if (ih / iw < aspectRatio) {
+  if (iw / ih < aspectRatio) {
+    canvas.width = ih * aspectRatio;
     canvas.height = ih;
-    canvas.width = ih / aspectRatio;
   } else {
+    canvas.height = iw / aspectRatio;
     canvas.width = iw;
-    canvas.height = iw * aspectRatio;
   }
   document.body.appendChild(canvas);
 }
+
 
 function draw() {
   // Traits defined in traits.js; live from chain
