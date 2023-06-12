@@ -42,9 +42,9 @@ function setup() {
     let iw = windowWidth;
 
     if (iw / ih < aspectRatio) {
-        createCanvas(ih * aspectRatio, ih);
+        c = createCanvas(ih * aspectRatio, ih);
     } else {
-        createCanvas(iw, iw / aspectRatio);
+        c = createCanvas(iw, iw / aspectRatio);
     }
 
     // Initiate Random class
