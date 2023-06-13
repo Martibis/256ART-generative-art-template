@@ -37,14 +37,17 @@ function setup() {
     // Set aspect ratio
     let aspectRatio = 0.75;
 
+    // Set pixel density; normalizing the p5js canvas
+    pixelDensity(devicePixelRatio);
+
     // Calculate dimensions
     let ih = windowHeight;
     let iw = windowWidth;
 
     if (iw / ih < aspectRatio) {
-        c = createCanvas(ih * aspectRatio, ih);
-    } else {
         c = createCanvas(iw, iw / aspectRatio);
+    } else {
+        c = createCanvas(ih * aspectRatio, ih);
     }
 
     // Initiate Random class

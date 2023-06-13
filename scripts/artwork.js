@@ -42,15 +42,14 @@ function setup() {
   let iw = window.innerWidth * dp;
 
   if (iw / ih < aspectRatio) {
-    canvas.width = ih * aspectRatio;
-    canvas.height = ih;
-  } else {
-    canvas.height = iw / aspectRatio;
     canvas.width = iw;
+    canvas.height = iw / aspectRatio;
+  } else {
+    canvas.height = ih;
+    canvas.width = ih * aspectRatio;
   }
   document.body.appendChild(canvas);
 }
-
 
 function draw() {
   // Traits defined in traits.js; live from chain
