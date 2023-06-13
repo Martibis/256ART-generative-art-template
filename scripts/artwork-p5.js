@@ -38,7 +38,7 @@ function setup() {
     let aspectRatio = 0.75;
 
     // Set pixel density; normalizing the p5js canvas
-    pixelDensity(devicePixelRatio);
+    pixelDensity(displayDensity());
 
     // Calculate dimensions
     let ih = windowHeight;
