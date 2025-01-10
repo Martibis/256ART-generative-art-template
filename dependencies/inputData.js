@@ -59,7 +59,7 @@ let inputData = {
         let traitArray = traits[Object.keys(traits)[j]];
         for (let k = 0; k < traitArray.length; k++) {
             if (r < traitArray[k].weight) {
-                inputData[Object.keys(traits)[j]] = traitArray[k].trait_value;
+                inputData[Object.keys(traits)[j]] = { "value": traitArray[k].trait_value, "description": traitArray[k].trait_description };
                 break;
             }
         }

@@ -59,10 +59,18 @@ To access the traits defined in `traits.json`, access the inputData object which
 
 ```javascript
 {
-  "color": [
-    { "trait_value": "red", "weight": 6000 }, //60% chance (0 - 6000)
-    { "trait_value": "blue", "weight": 10000 } //40% chance (6000 - 10000)
-  ]
+  "Paint Color": [
+        {
+            "trait_description": "Sand yellow",
+            "trait_value": "#C6A664",
+            "weight": 2000 // 20% chance
+        },
+        {
+            "trait_description": "Pastel orange",
+            "trait_value": "#FF7514",
+            "weight": 10000 // 80% chance
+        },
+    ]
 }
 ```
 
@@ -70,8 +78,8 @@ You could access this trait in your artwork.js / artwork-p5.js code like this:
 
 ```javascript
 function draw() {
-  let color = inputData.color; // Access the color trait defined in traits.json
-  // Add code for creating generative art using the color trait...
+  let color = inputData["Paint Color"].value; // Access the color trait value defined in traits.json
+  // Add code for creating generative art using the Paint Color trait value...
 }
 ```
 
@@ -83,7 +91,7 @@ It's important to note that `traits.json` is only for the traits you would like 
 
 Traits are stored fully in-chain and calculated on a scale of 0 - 10000. Use strings for `trait_description` and `trait_value`. If you need to store non-string data types, use parse functions (e.g., `parseInt()`) inside your art script.
 
-To access traits in your art script, use `inputData["traitName"]`.
+To access trait values in your art script, use `inputData["traitName"].value`.
 
 ## inputData.js
 
