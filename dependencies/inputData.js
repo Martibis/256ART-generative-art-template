@@ -19,6 +19,10 @@ let prevrandao = search.get('prevrandao') || Math.floor(Number.MAX_SAFE_INTEGER 
 let totalSupply = search.get('totalSupply') || Math.floor(Math.random() * 256);
 let balanceOfOwner = search.get('balanceOfOwner') || Math.floor(Math.random() * totalSupply);
 let tokenId = search.get('tokenId') || Math.floor(Math.random() * totalSupply);
+let blockTimestamp = search.get('blockTimestamp') || Math.floor(Date.now() / 1000);
+let blockBaseFee = search.get('blockBaseFee') || Math.floor(Math.random() * 1e9); // Example: up to 1 Gwei
+let blockCoinbase = search.get('blockCoinbase') || genRandomAddress();
+let ethBalanceOfOwner = search.get('ethBalanceOfOwner') || Math.floor(Math.random() * 1e18); // Up to 1 ETH
 
 // Main input data
 let inputData = {
@@ -29,7 +33,13 @@ let inputData = {
     'blockNumber': blockNumber,
     'prevrandao': prevrandao,
     'totalSupply': totalSupply,
-    'balanceOfOwner': balanceOfOwner
+    'balanceOfOwner': balanceOfOwner,
+
+    // Including the new fields
+    'blockTimestamp': blockTimestamp,
+    'blockBaseFee': blockBaseFee,
+    'blockCoinbase': blockCoinbase,
+    'ethBalanceOfOwner': ethBalanceOfOwner
 };
 
 (async function () {

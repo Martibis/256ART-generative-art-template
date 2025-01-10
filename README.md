@@ -131,6 +131,67 @@ function draw() {
 
 By setting the `window.rendered` property, you are providing 256ART with a signal to capture the rendered canvas and generate an image preview. Providing image previews is needed for front-ends as they may not be able to render multiple "live rendering" of the art script, especially when the artworks are resource-intensive. The image previews make it easier for front-ends to display your generative art without the performance overhead of rendering the artwork live.
 
+### Creating Dynamic Artworks
+
+With 256ART exposing a variety of blockchain parameters through the `inputData` object, you can create generative artworks that respond to on-chain events and states. This allows your artwork to evolve based on actions such as transfers, sales, or changes in an owner's ETH balance. Below, we'll explore how to utilize these parameters to add dynamic behavior to your generative art.
+
+#### Available Blockchain Parameters
+
+The following blockchain parameters are available in `inputData`:
+
+- `ownerOfPiece`: The hexadecimal address of the current owner of the token.
+- `blockHash`: The hash of the previous block.
+- `blockNumber`: The current block number.
+- `blockTimestamp`: The timestamp of the current block.
+- `blockBaseFee`: The base fee of the current block.
+- `blockCoinbase`: The hexadecimal address of the block miner.
+- `prevrandao`: The previous randomness value from the block.
+- `totalSupply`: The total number of tokens minted.
+- `balanceOfOwner`: The number of tokens owned by the current owner.
+- `ethBalanceOfOwner`: The ETH balance of the current owner.
+
+These parameters can be accessed in your `artwork.js` or `artwork-p5.js` file via the `inputData` object. Below are examples of how to incorporate these parameters into your artwork.
+
+#### Accessing Blockchain Parameters
+
+Here's how you can access and utilize the blockchain parameters within your artwork code:
+
+```javascript
+function draw() {
+    // Accessing blockchain parameters from inputData
+    const ownerAddress = inputData["ownerOfPiece"];
+    const blockHash = inputData["blockHash"];
+    const blockNumber = parseInt(inputData["blockNumber"]);
+    const blockTimestamp = parseInt(inputData["blockTimestamp"]);
+    const blockBaseFee = parseFloat(inputData["blockBaseFee"]);
+    const blockCoinbase = inputData["blockCoinbase"];
+    const prevrandao = parseInt(inputData["prevrandao"]);
+    const totalSupply = parseInt(inputData["totalSupply"]);
+    const balanceOfOwner = parseInt(inputData["balanceOfOwner"]);
+    const ethBalanceOfOwner = parseFloat(inputData["ethBalanceOfOwner"]);
+
+    // Example usage: Change background color based on ETH balance
+    const colorIntensity = map(ethBalanceOfOwner, 0, 100, 0, 255);
+    background(colorIntensity, 100, 150);
+
+    // Example usage: Display owner address as part of the artwork
+    fill(255);
+    textSize(w * 0.02);
+    text(`Owner: ${ownerAddress}`, 10, h - 20);
+
+    // Example usage: Animate elements based on block number
+    let angle = (blockNumber % 360) * (PI / 180);
+    push();
+    translate(w / 2, h / 2);
+    rotate(angle);
+    // Draw a rotating shape
+    ellipse(0, 0, w * 0.3, h * 0.3);
+    pop();
+
+    // Additional dynamic elements can be added using other parameters
+}
+```
+
 ### Uploading Files to 256ART
 
 After modifying and minifying the artwork.js / artwork-p5.js and traits.json files, upload the minified versions to the 256ART website. Fill out the form on the 256ART website and submit it to create the transaction for creating your art on-chain.

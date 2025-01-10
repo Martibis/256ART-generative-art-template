@@ -58,6 +58,7 @@ function setup() {
 }
 
 function draw() {
+    console.log(inputData);
     // Traits defined in traits.js; live from chain
     let amountOfLines = parseInt(inputData["Amount Of Lines"].value);
     let color = inputData["Paint Color"].value;
