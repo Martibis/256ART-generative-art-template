@@ -2,7 +2,7 @@
     "Amount Of Lines": [
         {
             "trait_description": "One line",
-            "trait_value": 1,
+            "trait_value": "1",
             "weight": 5000
         },
         {
