@@ -1,0 +1,355 @@
+<!-- Avoid modifying this file -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Batch Artwork Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <style>
+        /* Basic Reset */
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Control Panel Styling */
+        #controlPanel {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        #controlPanel label {
+            font-size: 16px;
+        }
+
+        #controlPanel input {
+            padding: 5px 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            width: 80px;
+        }
+
+        #controlPanel button {
+            padding: 6px 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #000;
+            cursor: pointer;
+        }
+
+        #controlPanel button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        /* Image Grid Styling */
+        #imageGrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 20px;
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Iframe Styling (Hidden) */
+        #artworkIframe {
+            width: 800px;
+            height: 800px;
+            border: none;
+            opacity: 0;
+            /* Hide iframe to keep the outer page clean */
+        }
+
+        /* Completion Message Styling */
+        #completionMessage {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #fff;
+            display: none;
+        }
+
+        /* Progress Bar Styling */
+        #progressContainer {
+            width: 100%;
+            max-width: 1200px;
+            background-color: #444;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            height: 20px;
+            display: none;
+        }
+
+        #progressBar {
+            width: 0%;
+            height: 100%;
+            background-color: #fff;
+            transition: width 0.3s ease;
+        }
+
+        /* Download Button Styling */
+        #downloadAllBtn {
+            padding: 6px 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #000;
+            cursor: pointer;
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        #downloadAllBtn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            #controlPanel {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            #controlPanel label,
+            #controlPanel input,
+            #controlPanel button {
+                width: 100%;
+                text-align: center;
+            }
+
+            #controlPanel button {
+                margin-top: 10px;
+            }
+
+            #artworkIframe {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Control Panel -->
+    <div id="controlPanel">
+        <label for="batchSize">Batch Size:</label>
+        <input type="number" id="batchSize" min="1" max="100" value="5">
+        <label for="imageSize">Image Size (px):</label>
+        <input type="number" id="imageSize" min="100" max="2400" value="600">
+        <button id="startBatchBtn">Start Batch</button>
+    </div>
+
+    <!-- Progress Bar -->
+    <div id="progressContainer">
+        <div id="progressBar"></div>
+    </div>
+
+    <!-- Image Grid -->
+    <div id="imageGrid"></div>
+
+    <!-- Download All Button -->
+    <button id="downloadAllBtn">Download All as ZIP</button>
+
+    <!-- Completion Message -->
+    <div id="completionMessage">✅ Batch generation complete!</div>
+
+    <!-- Hidden Iframe -->
+    <iframe id="artworkIframe" src="index.html"></iframe>
+
+    <!-- Include JSZip library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js"></script>
+
+    <!-- Include FileSaver.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <script>
+        (function () {
+            // === References to DOM Elements ===
+            const artworkIframe = document.getElementById('artworkIframe');
+            const startBatchBtn = document.getElementById('startBatchBtn');
+            const batchSizeInput = document.getElementById('batchSize');
+            const imageGrid = document.getElementById('imageGrid');
+            const completionMessage = document.getElementById('completionMessage');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            const downloadAllBtn = document.getElementById('downloadAllBtn');
+            const imageSizeInput = document.getElementById('imageSize'); // New input for image size
+
+            // === Batch Parameters ===
+            let totalBatch = 0;
+            let currentIndex = 0;
+            let imagesArray = [];
+
+            // === Start Batch Button Click Handler ===
+            startBatchBtn.addEventListener('click', () => {
+                // Get and validate batch size
+                const batchSize = parseInt(batchSizeInput.value);
+                if (isNaN(batchSize) || batchSize < 1) {
+                    alert('Please enter a valid batch size (minimum 1).');
+                    return;
+                }
+
+                const imageSize = parseInt(imageSizeInput.value);
+                if (isNaN(imageSize) || imageSize < 100 || imageSize > 2000) {
+                    alert('Please enter a valid image size between 100px and 2000px.');
+                    return;
+                }
+
+                totalBatch = batchSize;
+                currentIndex = 0;
+                imagesArray = [];
+                imageGrid.innerHTML = ''; // Clear previous images
+                completionMessage.style.display = 'none'; // Hide previous messages
+                downloadAllBtn.style.display = 'none'; // Hide download button
+                progressBar.style.width = '0%'; // Reset progress bar
+                progressContainer.style.display = 'block'; // Show progress bar
+
+                // Set iframe size based on user input
+                artworkIframe.style.width = `${imageSize}px`;
+                artworkIframe.style.height = `${imageSize}px`;
+
+                // Disable the button to prevent multiple clicks
+                startBatchBtn.disabled = true;
+
+                // Start the batch generation process
+                generateNextImage();
+            });
+
+            // === Function to Generate Next Image in the Batch ===
+            function generateNextImage() {
+                if (currentIndex >= totalBatch) {
+                    // Batch complete
+                    completionMessage.style.display = 'block';
+                    progressContainer.style.display = 'none';
+                    downloadAllBtn.style.display = 'block'; // Show download button
+                    startBatchBtn.disabled = false;
+                    return;
+                }
+
+                console.log(`Generating image ${currentIndex + 1} of ${totalBatch}...`);
+
+                // Start loading the iframe with unique query parameter
+                // This ensures a fresh generation each time
+                artworkIframe.src = `index.html?batch=${currentIndex}`;
+
+                // Start polling for window.rendered
+                pollIframeForRendered().then(dataURL => {
+                    console.log(`Image ${currentIndex + 1} received.`);
+
+                    // Add image to the grid
+                    addImageToGrid(dataURL);
+
+                    // Update progress bar
+                    const progressPercent = ((currentIndex + 1) / totalBatch) * 100;
+                    progressBar.style.width = `${progressPercent}%`;
+
+                    currentIndex++;
+                    generateNextImage(); // Proceed to the next image
+                }).catch(error => {
+                    console.error(`Error generating image ${currentIndex + 1}:`, error);
+                    alert(`Error generating image ${currentIndex + 1}: ${error.message}`);
+                    currentIndex++;
+                    generateNextImage(); // Proceed to the next image despite the error
+                });
+            }
+
+            // === Function to Poll the Iframe for window.rendered ===
+            function pollIframeForRendered(timeout = 10000, interval = 500) {
+                return new Promise((resolve, reject) => {
+                    const startTime = Date.now();
+
+                    const poller = setInterval(() => {
+                        try {
+                            const iframeWindow = artworkIframe.contentWindow;
+                            if (iframeWindow.window.rendered) {
+                                clearInterval(poller);
+                                // Convert the canvas to a data URL
+                                const dataURL = iframeWindow.window.rendered.toDataURL("image/png");
+                                resolve(dataURL);
+                            }
+                        } catch (e) {
+                            // Possible cross-origin error
+                            console.error('Error accessing iframe content:', e);
+                            reject(new Error('Cannot access iframe content. Ensure both pages are on the same origin.'));
+                        }
+
+                        // Check for timeout
+                        if (Date.now() - startTime > timeout) {
+                            clearInterval(poller);
+                            reject(new Error('Rendering timed out.'));
+                        }
+                    }, interval);
+                });
+            }
+
+            // === Function to Add Image to Grid ===
+            function addImageToGrid(dataURL) {
+                const img = document.createElement('img');
+                img.src = dataURL;
+                img.alt = `Rendered Image ${currentIndex + 1}`;
+
+                const gridItem = document.createElement('div');
+                gridItem.className = 'grid-item';
+                gridItem.appendChild(img);
+
+                imageGrid.appendChild(gridItem);
+                imagesArray.push(dataURL); // Store the dataURL for ZIP download
+            }
+
+            // === Download All Images as ZIP ===
+            downloadAllBtn.addEventListener('click', () => {
+                if (imagesArray.length === 0) {
+                    alert('No images to download.');
+                    return;
+                }
+
+                const zip = new JSZip();
+                imagesArray.forEach((dataURL, index) => {
+                    const imgData = dataURL.split(',')[1];
+                    zip.file(`rendered_${index + 1}.png`, imgData, { base64: true });
+                });
+
+                zip.generateAsync({ type: 'blob' })
+                    .then(content => {
+                        saveAs(content, 'batch_images.zip');
+                    })
+                    .catch(err => {
+                        console.error('Error generating ZIP:', err);
+                        alert('An error occurred while generating the ZIP file.');
+                    });
+            });
+
+        })();
+    </script>
+
+</body>
+
+</html>

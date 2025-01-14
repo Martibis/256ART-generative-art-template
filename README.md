@@ -20,6 +20,7 @@ To get started with this template, follow these steps:
 - `traits.json`: This file contains the code that defines the traits that should be stored on-chain.
 - `inputData.js`: This file emulates how traits would be added from the chain. You should not modify this file.
 - `index.html`: This file contains the code for displaying the generative art on the website. You can add libraries CDN scripts to this file, but only those that can be found on EthFS.
+- `batch-generator.html`: This file contains the code for generating batch images for testing purposes. You should not modify this file, but can run it to generate a batch of previews.
 
 ### Creating the Generative Art
 
@@ -130,6 +131,33 @@ function draw() {
 ```
 
 By setting the `window.rendered` property, you are providing 256ART with a signal to capture the rendered canvas and generate an image preview. Providing image previews is needed for front-ends as they may not be able to render multiple "live rendering" of the art script, especially when the artworks are resource-intensive. The image previews make it easier for front-ends to display your generative art without the performance overhead of rendering the artwork live.
+
+### Batch Artwork Generator
+
+When your `artwork-p5.js` or `artwork.js` and your `traits.json` are completed, you can use the batch artwork generator for testing purposes. The **Batch Artwork Generator** tool streamlines the creation of multiple previews. It allows you to specify the number of previews and their dimensions, generates them efficiently, and provides an option to download all images as a ZIP file.
+
+#### Features
+
+- **Batch Generation:** Create multiple artworks in one go.
+- **Customizable Image Size:** Define the width and height for each image.
+- **Progress Monitoring:** Visual progress bar to track generation.
+- **Download as ZIP:** Easily download all generated images together.
+
+#### How to Use
+
+1. **Open the Generator:**
+   - Navigate to `batch-generator.html` in your browser. Ensure it's served from a local server.
+
+2. **Configure Parameters:**
+   - **Batch Size:** Enter the number of artworks you wish to generate.
+   - **Image Size:** Specify the desired size in pixels.
+
+3. **Start Generation:**
+   - Click the **Start Batch** button. The progress bar will indicate the generation status.
+
+4. **Download Images:**
+   - Once completed, click the **Download All as ZIP** button to download all generated artworks.
+
 
 ### Creating Dynamic Artworks
 
